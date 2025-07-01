@@ -26,13 +26,13 @@ namespace CertiNet.Models
         public int ClienteId { get; set; }
 
         [ForeignKey("ClienteId")]
-        public virtual Cliente Cliente { get; set; }
+        public virtual Cliente? Cliente { get; set; }
 
 
         [DisplayName("Produto")]
         public int ProdutoId { get; set; }
         
         [ForeignKey("ProdutoId")]
-        public virtual Produto Produto { get; set; }
+        public virtual Produto? Produto { get; set; }
     }
 }

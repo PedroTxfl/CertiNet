@@ -49,7 +49,7 @@ namespace CertiNet.Controllers
         // GET: Agendamentoes/Create
         public IActionResult Create()
         {
-            ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "CPF_CNPJ");
+            ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "NomeRazaoSocial");
             ViewData["UsuarioId"] = new SelectList(_context.Usuario, "Id", "Nome");
             return View();
         }
@@ -67,7 +67,8 @@ namespace CertiNet.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "CPF_CNPJ", agendamento.ClienteId);
+
+            ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "NomeRazaoSocial", agendamento.ClienteId);
             ViewData["UsuarioId"] = new SelectList(_context.Usuario, "Id", "Nome", agendamento.UsuarioId);
             return View(agendamento);
         }

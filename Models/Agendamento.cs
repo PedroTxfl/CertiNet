@@ -29,14 +29,14 @@ namespace CertiNet.Models
             public int ClienteId { get; set; }
             
             [ForeignKey("ClienteId")]
-            public virtual Cliente Cliente { get; set; }
+            public virtual Cliente? Cliente { get; set; }
 
 
             [DisplayName("Agente de Registro")]
             public int UsuarioId { get; set; }
             
             [ForeignKey("UsuarioId")]
-            public virtual Usuario Usuario { get; set; }
+            public virtual Usuario? Usuario { get; set; }
         }
 
     public enum ModalidadeAgendamento
