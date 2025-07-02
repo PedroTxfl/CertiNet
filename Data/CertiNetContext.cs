@@ -4,17 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CertiNet.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CertiNet.Data
 {
-    public class CertiNetContext : DbContext
+    public class CertiNetContext : IdentityDbContext<Usuario>
     {
         public CertiNetContext (DbContextOptions<CertiNetContext> options)
             : base(options)
         {
         }
 
-        public DbSet<CertiNet.Models.Usuario> Usuario { get; set; } = default!;
 
         public DbSet<CertiNet.Models.Agendamento>? Agendamento { get; set; }
 

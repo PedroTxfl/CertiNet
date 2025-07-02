@@ -20,27 +20,30 @@ namespace CertiNet.Controllers
         }
 
         // GET: Clientes
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, int? pageNumber)
         {
             ViewData["CurrentFilter"] = searchString;
 
-            // 2. Começa a consulta selecionando todos os clientes, sem executar ainda.
-            var clientes = from c in _context.Cliente // Use o nome do seu DbSet, ex: _context.Cliente
+            var clientes = from c in _context.Cliente
                            select c;
 
-            // 3. Se o termo de busca (searchString) não for nulo ou vazio...
             if (!String.IsNullOrEmpty(searchString))
             {
-                // 4. ...aplica um filtro (cláusula WHERE) na consulta.
-                //    A busca vai procurar o termo no Nome/Razão Social OU no CPF/CNPJ.
-                //    O .Contains() é o equivalente ao "LIKE" do SQL.
                 clientes = clientes.Where(c => c.NomeRazaoSocial.Contains(searchString)
                                        || c.CPF_CNPJ.Contains(searchString));
             }
 
-            // 5. Finalmente, executa a consulta (com ou sem filtro) e envia a
-            //    lista de resultados para a View.
-            return View(await clientes.AsNoTracking().ToListAsync());
+            int pageSize = 10; 
+            int currentPage = pageNumber ?? 1; 
+
+            var pagedClientes = await clientes.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            ViewBag.PageNumber = currentPage;
+            ViewBag.TotalPages = (int)Math.Ceiling(await clientes.CountAsync() / (double)pageSize);
+            ViewBag.HasPreviousPage = currentPage > 1;
+            ViewBag.HasNextPage = currentPage < ViewBag.TotalPages;
+
+            return View(pagedClientes);
         }
 
         // GET: Clientes/Details/5

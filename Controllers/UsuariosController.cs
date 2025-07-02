@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CertiNet.Data;
 using CertiNet.Models;
+using Microsoft.AspNetCore.Authorization; // Adicionado para proteger o controller
 
 namespace CertiNet.Controllers
 {
+    // Apenas usuários logados poderão acessar a gestão de usuários.
+    [Authorize]
     public class UsuariosController : Controller
     {
         private readonly CertiNetContext _context;
@@ -22,20 +25,18 @@ namespace CertiNet.Controllers
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
-              return _context.Usuario != null ? 
-                          View(await _context.Usuario.ToListAsync()) :
-                          Problem("Entity set 'CertiNetContext.Usuario'  is null.");
+            return View(await _context.Users.ToListAsync());
         }
 
         // GET: Usuarios/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Usuario == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var usuario = await _context.Usuario
+            var usuario = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (usuario == null)
             {
@@ -45,88 +46,23 @@ namespace CertiNet.Controllers
             return View(usuario);
         }
 
+
+
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            return View();
-        }
-
-        // POST: Usuarios/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,UsuarioLogin,SenhaHash,Perfil")] Usuario usuario)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(usuario);
-        }
-
-        // GET: Usuarios/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Usuario == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Usuario.FindAsync(id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-            return View(usuario);
-        }
-
-        // POST: Usuarios/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,UsuarioLogin,SenhaHash,Perfil")] Usuario usuario)
-        {
-            if (id != usuario.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsuarioExists(usuario.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(usuario);
+            return Redirect("/Identity/Account/Register");
         }
 
         // GET: Usuarios/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Usuario == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var usuario = await _context.Usuario
+            var usuario = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (usuario == null)
             {
@@ -139,25 +75,21 @@ namespace CertiNet.Controllers
         // POST: Usuarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.Usuario == null)
-            {
-                return Problem("Entity set 'CertiNetContext.Usuario'  is null.");
-            }
-            var usuario = await _context.Usuario.FindAsync(id);
+            var usuario = await _context.Users.FindAsync(id);
             if (usuario != null)
             {
-                _context.Usuario.Remove(usuario);
+                _context.Users.Remove(usuario);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsuarioExists(int id)
+        private bool UsuarioExists(string id)
         {
-          return (_context.Usuario?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

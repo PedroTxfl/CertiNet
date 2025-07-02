@@ -33,7 +33,7 @@ namespace CertiNet.Models
 
 
             [DisplayName("Agente de Registro")]
-            public int UsuarioId { get; set; }
+            public string UsuarioId { get; set; }
             
             [ForeignKey("UsuarioId")]
             public virtual Usuario? Usuario { get; set; }

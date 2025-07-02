@@ -16,11 +16,9 @@
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UsuarioLogin)
+                @Html.DisplayNameFor(model => model.UserName)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SenhaHash)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Perfil)
             </th>
@@ -34,10 +32,7 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UsuarioLogin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SenhaHash)
+                @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Perfil)

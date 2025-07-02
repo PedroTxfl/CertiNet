@@ -50,7 +50,7 @@ namespace CertiNet.Controllers
         public IActionResult Create()
         {
             ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "NomeRazaoSocial");
-            ViewData["UsuarioId"] = new SelectList(_context.Usuario, "Id", "Nome");
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome");
             return View();
         }
 
@@ -69,7 +69,7 @@ namespace CertiNet.Controllers
             }
 
             ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "NomeRazaoSocial", agendamento.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuario, "Id", "Nome", agendamento.UsuarioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome", agendamento.UsuarioId);
             return View(agendamento);
         }
 
@@ -87,7 +87,7 @@ namespace CertiNet.Controllers
                 return NotFound();
             }
             ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "CPF_CNPJ", agendamento.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuario, "Id", "Nome", agendamento.UsuarioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome", agendamento.UsuarioId);
             return View(agendamento);
         }
 
@@ -124,7 +124,7 @@ namespace CertiNet.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "CPF_CNPJ", agendamento.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuario, "Id", "Nome", agendamento.UsuarioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome", agendamento.UsuarioId);
             return View(agendamento);
         }
 
