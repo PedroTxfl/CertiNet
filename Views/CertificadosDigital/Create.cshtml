@@ -22,12 +22,9 @@
                 <input asp-for="DataVencimento" class="form-control" />
                 <span asp-validation-for="DataVencimento" class="text-danger"></span>
             </div>
-            
             <div class="form-group">
-                <input asp-for="EstaAtivo" class="form-check-input" type="checkbox" id="flexCheckDefault">
-                <label asp-for="EstaAtivo" class="form-check-label" for="flexCheckDefault">
-                    @Html.DisplayNameFor(model => model.EstaAtivo)
-                </label>
+                <input asp-for="EstaAtivo" type="checkbox" class="btn-check" autocomplete="off">
+                <label asp-for="EstaAtivo" class="btn btn-outline-success">@Html.DisplayNameFor(model => model.EstaAtivo)</label>
             </div>
             <div class="form-group">
                 <label asp-for="ClienteId" class="control-label"></label>
