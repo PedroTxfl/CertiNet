@@ -10,23 +10,23 @@ using CertiNet.Models;
 
 namespace CertiNet.Controllers
 {
-    public class CertificadoDigitalsController : Controller
+    public class CertificadosDigitalController : Controller
     {
         private readonly CertiNetContext _context;
 
-        public CertificadoDigitalsController(CertiNetContext context)
+        public CertificadosDigitalController(CertiNetContext context)
         {
             _context = context;
         }
 
-        // GET: CertificadoDigitals
+        // GET: CertificadosDigital
         public async Task<IActionResult> Index()
         {
-            var certiNetContext = _context.CertificadoDigital.Include(c => c.Cliente).Include(c => c.Produto);
+            var certiNetContext = _context.CertificadoDigital.Include(c => c.Agendamento).Include(c => c.Cliente).Include(c => c.Produto);
             return View(await certiNetContext.ToListAsync());
         }
 
-        // GET: CertificadoDigitals/Details/5
+        // GET: CertificadosDigital/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.CertificadoDigital == null)
@@ -35,6 +35,7 @@ namespace CertiNet.Controllers
             }
 
             var certificadoDigital = await _context.CertificadoDigital
+                .Include(c => c.Agendamento)
                 .Include(c => c.Cliente)
                 .Include(c => c.Produto)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -46,20 +47,21 @@ namespace CertiNet.Controllers
             return View(certificadoDigital);
         }
 
-        // GET: CertificadoDigitals/Create
+        // GET: CertificadosDigital/Create
         public IActionResult Create()
         {
+            ViewData["AgendamentoId"] = new SelectList(_context.Agendamento, "Id", "Id");
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "CPF_CNPJ");
-            ViewData["ProdutoId"] = new SelectList(_context.Set<Produto>(), "Id", "Categoria");
+            ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Categoria");
             return View();
         }
 
-        // POST: CertificadoDigitals/Create
+        // POST: CertificadosDigital/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DataEmissao,DataVencimento,EstaAtivo,ClienteId,ProdutoId")] CertificadoDigital certificadoDigital)
+        public async Task<IActionResult> Create([Bind("Id,DataEmissao,DataVencimento,EstaAtivo,ClienteId,ProdutoId,AgendamentoId")] CertificadoDigital certificadoDigital)
         {
             if (ModelState.IsValid)
             {
@@ -67,12 +69,13 @@ namespace CertiNet.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AgendamentoId"] = new SelectList(_context.Agendamento, "Id", "Id", certificadoDigital.AgendamentoId);
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "CPF_CNPJ", certificadoDigital.ClienteId);
-            ViewData["ProdutoId"] = new SelectList(_context.Set<Produto>(), "Id", "Categoria", certificadoDigital.ProdutoId);
+            ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Categoria", certificadoDigital.ProdutoId);
             return View(certificadoDigital);
         }
 
-        // GET: CertificadoDigitals/Edit/5
+        // GET: CertificadosDigital/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.CertificadoDigital == null)
@@ -85,17 +88,18 @@ namespace CertiNet.Controllers
             {
                 return NotFound();
             }
+            ViewData["AgendamentoId"] = new SelectList(_context.Agendamento, "Id", "Id", certificadoDigital.AgendamentoId);
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "CPF_CNPJ", certificadoDigital.ClienteId);
-            ViewData["ProdutoId"] = new SelectList(_context.Set<Produto>(), "Id", "Categoria", certificadoDigital.ProdutoId);
+            ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Categoria", certificadoDigital.ProdutoId);
             return View(certificadoDigital);
         }
 
-        // POST: CertificadoDigitals/Edit/5
+        // POST: CertificadosDigital/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DataEmissao,DataVencimento,EstaAtivo,ClienteId,ProdutoId")] CertificadoDigital certificadoDigital)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DataEmissao,DataVencimento,EstaAtivo,ClienteId,ProdutoId,AgendamentoId")] CertificadoDigital certificadoDigital)
         {
             if (id != certificadoDigital.Id)
             {
@@ -122,12 +126,13 @@ namespace CertiNet.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AgendamentoId"] = new SelectList(_context.Agendamento, "Id", "Id", certificadoDigital.AgendamentoId);
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "CPF_CNPJ", certificadoDigital.ClienteId);
-            ViewData["ProdutoId"] = new SelectList(_context.Set<Produto>(), "Id", "Categoria", certificadoDigital.ProdutoId);
+            ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Categoria", certificadoDigital.ProdutoId);
             return View(certificadoDigital);
         }
 
-        // GET: CertificadoDigitals/Delete/5
+        // GET: CertificadosDigital/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.CertificadoDigital == null)
@@ -136,6 +141,7 @@ namespace CertiNet.Controllers
             }
 
             var certificadoDigital = await _context.CertificadoDigital
+                .Include(c => c.Agendamento)
                 .Include(c => c.Cliente)
                 .Include(c => c.Produto)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -147,7 +153,7 @@ namespace CertiNet.Controllers
             return View(certificadoDigital);
         }
 
-        // POST: CertificadoDigitals/Delete/5
+        // POST: CertificadosDigital/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

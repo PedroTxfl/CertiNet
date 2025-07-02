@@ -34,5 +34,10 @@ namespace CertiNet.Models
         
         [ForeignKey("ProdutoId")]
         public virtual Produto? Produto { get; set; }
+
+        public int? AgendamentoId { get; set; }
+
+        [ForeignKey("AgendamentoId")]
+        public virtual Agendamento? Agendamento { get; set; }
     }
 }

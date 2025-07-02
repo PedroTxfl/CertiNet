@@ -1,0 +1,62 @@
+﻿@model IEnumerable<CertiNet.Models.ViewModels.PerformanceAgenteViewModel>
+
+@{
+    ViewData["Title"] = "Relatório de Performance de Agentes";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="text-muted">Análise de vendas e valor total gerado por cada agente.</p>
+<hr />
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.NomeAgente)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.VendasRealizadas)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.ValorTotalVendido)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>@Html.DisplayFor(modelItem => item.NomeAgente)</strong>
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.VendasRealizadas)
+                    </td>
+                    <td class="text-right">
+                        @item.ValorTotalVendido.ToString("C", new System.Globalization.CultureInfo("pt-BR"))
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="font-weight-bold table-info">
+                <td colspan="2" class="text-right">Total Geral Vendido:</td>
+                <td class="text-right">
+                    @Model.Sum(item => item.ValorTotalVendido).ToString("C", new System.Globalization.CultureInfo("pt-BR"))
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        <p>Não foram encontradas vendas vinculadas a agendamentos para gerar este relatório.</p>
+    </div>
+}
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Voltar para a Central de Relatórios</a>
+</div>
