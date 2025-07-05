@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using CertiNet.Models
+@using CertiNet1.Areas.Identity.Data
 
-@inject SignInManager<Usuario> SignInManager
-@inject UserManager<Usuario> UserManager
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

@@ -6,21 +6,21 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using CertiNet.Models;
+using CertiNet1.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CertiNet.Areas.Identity.Pages.Account.Manage
+namespace CertiNet1.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<Usuario> _userManager;
-        private readonly SignInManager<Usuario> _signInManager;
+        private readonly UserManager<UserModel> _userManager;
+        private readonly SignInManager<UserModel> _signInManager;
 
         public IndexModel(
-            UserManager<Usuario> userManager,
-            SignInManager<Usuario> signInManager)
+            UserManager<UserModel> userManager,
+            SignInManager<UserModel> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -31,6 +31,8 @@ namespace CertiNet.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string Username { get; set; }
+
+        public string UserRole { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -61,10 +63,13 @@ namespace CertiNet.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(Usuario user)
+        private async Task LoadAsync(UserModel user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            UserRole = roles.FirstOrDefault();
 
             Username = userName;
 

@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CertiNet.Data;
-using CertiNet.Models;
+using CertiNet1.Data;
+using CertiNet1.Models;
 
-namespace CertiNet.Controllers
+namespace CertiNet1.Controllers
 {
     public class AgendamentoesController : Controller
     {
-        private readonly CertiNetContext _context;
+        private readonly CertiNet1Context _context;
 
-        public AgendamentoesController(CertiNetContext context)
+        public AgendamentoesController(CertiNet1Context context)
         {
             _context = context;
         }
@@ -22,19 +22,19 @@ namespace CertiNet.Controllers
         // GET: Agendamentoes
         public async Task<IActionResult> Index()
         {
-            var certiNetContext = _context.Agendamento.Include(a => a.Cliente).Include(a => a.Usuario);
-            return View(await certiNetContext.ToListAsync());
+            var certiNet1Context = _context.Agendamentos.Include(a => a.Cliente).Include(a => a.Usuario);
+            return View(await certiNet1Context.ToListAsync());
         }
 
         // GET: Agendamentoes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Agendamento == null)
+            if (id == null || _context.Agendamentos == null)
             {
                 return NotFound();
             }
 
-            var agendamento = await _context.Agendamento
+            var agendamento = await _context.Agendamentos
                 .Include(a => a.Cliente)
                 .Include(a => a.Usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -49,8 +49,8 @@ namespace CertiNet.Controllers
         // GET: Agendamentoes/Create
         public IActionResult Create()
         {
-            ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "NomeRazaoSocial");
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome");
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "CPF_CNPJ");
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -67,27 +67,26 @@ namespace CertiNet.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "NomeRazaoSocial", agendamento.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome", agendamento.UsuarioId);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "CPF_CNPJ", agendamento.ClienteId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id", agendamento.UsuarioId);
             return View(agendamento);
         }
 
         // GET: Agendamentoes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Agendamento == null)
+            if (id == null || _context.Agendamentos == null)
             {
                 return NotFound();
             }
 
-            var agendamento = await _context.Agendamento.FindAsync(id);
+            var agendamento = await _context.Agendamentos.FindAsync(id);
             if (agendamento == null)
             {
                 return NotFound();
             }
-            ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "CPF_CNPJ", agendamento.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome", agendamento.UsuarioId);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "CPF_CNPJ", agendamento.ClienteId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id", agendamento.UsuarioId);
             return View(agendamento);
         }
 
@@ -123,20 +122,20 @@ namespace CertiNet.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Set<Cliente>(), "Id", "CPF_CNPJ", agendamento.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome", agendamento.UsuarioId);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "CPF_CNPJ", agendamento.ClienteId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id", agendamento.UsuarioId);
             return View(agendamento);
         }
 
         // GET: Agendamentoes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Agendamento == null)
+            if (id == null || _context.Agendamentos == null)
             {
                 return NotFound();
             }
 
-            var agendamento = await _context.Agendamento
+            var agendamento = await _context.Agendamentos
                 .Include(a => a.Cliente)
                 .Include(a => a.Usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -153,14 +152,14 @@ namespace CertiNet.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Agendamento == null)
+            if (_context.Agendamentos == null)
             {
-                return Problem("Entity set 'CertiNetContext.Agendamento'  is null.");
+                return Problem("Entity set 'CertiNet1Context.Agendamentos'  is null.");
             }
-            var agendamento = await _context.Agendamento.FindAsync(id);
+            var agendamento = await _context.Agendamentos.FindAsync(id);
             if (agendamento != null)
             {
-                _context.Agendamento.Remove(agendamento);
+                _context.Agendamentos.Remove(agendamento);
             }
             
             await _context.SaveChangesAsync();
@@ -169,7 +168,7 @@ namespace CertiNet.Controllers
 
         private bool AgendamentoExists(int id)
         {
-          return (_context.Agendamento?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Agendamentos?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

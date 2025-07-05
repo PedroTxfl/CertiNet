@@ -5,56 +5,37 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CertiNet.Data;
-using CertiNet.Models;
+using CertiNet1.Data;
+using CertiNet1.Models;
 
-namespace CertiNet.Controllers
+namespace CertiNet1.Controllers
 {
     public class ClientesController : Controller
     {
-        private readonly CertiNetContext _context;
+        private readonly CertiNet1Context _context;
 
-        public ClientesController(CertiNetContext context)
+        public ClientesController(CertiNet1Context context)
         {
             _context = context;
         }
 
         // GET: Clientes
-        public async Task<IActionResult> Index(string searchString, int? pageNumber)
+        public async Task<IActionResult> Index()
         {
-            ViewData["CurrentFilter"] = searchString;
-
-            var clientes = from c in _context.Cliente
-                           select c;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                clientes = clientes.Where(c => c.NomeRazaoSocial.Contains(searchString)
-                                       || c.CPF_CNPJ.Contains(searchString));
-            }
-
-            int pageSize = 10; 
-            int currentPage = pageNumber ?? 1; 
-
-            var pagedClientes = await clientes.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();
-
-            ViewBag.PageNumber = currentPage;
-            ViewBag.TotalPages = (int)Math.Ceiling(await clientes.CountAsync() / (double)pageSize);
-            ViewBag.HasPreviousPage = currentPage > 1;
-            ViewBag.HasNextPage = currentPage < ViewBag.TotalPages;
-
-            return View(pagedClientes);
+              return _context.Clientes != null ? 
+                          View(await _context.Clientes.ToListAsync()) :
+                          Problem("Entity set 'CertiNet1Context.Clientes'  is null.");
         }
 
         // GET: Clientes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Cliente == null)
+            if (id == null || _context.Clientes == null)
             {
                 return NotFound();
             }
 
-            var cliente = await _context.Cliente
+            var cliente = await _context.Clientes
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
@@ -89,12 +70,12 @@ namespace CertiNet.Controllers
         // GET: Clientes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Cliente == null)
+            if (id == null || _context.Clientes == null)
             {
                 return NotFound();
             }
 
-            var cliente = await _context.Cliente.FindAsync(id);
+            var cliente = await _context.Clientes.FindAsync(id);
             if (cliente == null)
             {
                 return NotFound();
@@ -140,12 +121,12 @@ namespace CertiNet.Controllers
         // GET: Clientes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Cliente == null)
+            if (id == null || _context.Clientes == null)
             {
                 return NotFound();
             }
 
-            var cliente = await _context.Cliente
+            var cliente = await _context.Clientes
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
@@ -160,14 +141,14 @@ namespace CertiNet.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Cliente == null)
+            if (_context.Clientes == null)
             {
-                return Problem("Entity set 'CertiNetContext.Cliente'  is null.");
+                return Problem("Entity set 'CertiNet1Context.Clientes'  is null.");
             }
-            var cliente = await _context.Cliente.FindAsync(id);
+            var cliente = await _context.Clientes.FindAsync(id);
             if (cliente != null)
             {
-                _context.Cliente.Remove(cliente);
+                _context.Clientes.Remove(cliente);
             }
             
             await _context.SaveChangesAsync();
@@ -176,7 +157,7 @@ namespace CertiNet.Controllers
 
         private bool ClienteExists(int id)
         {
-          return (_context.Cliente?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Clientes?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

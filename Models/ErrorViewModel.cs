@@ -1,4 +1,4 @@
-namespace CertiNet.Models
+namespace CertiNet1.Models
 {
     public class ErrorViewModel
     {

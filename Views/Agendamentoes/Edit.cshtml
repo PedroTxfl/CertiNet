@@ -1,4 +1,4 @@
-﻿@model CertiNet.Models.Agendamento
+﻿@model CertiNet1.Models.Agendamento
 
 @{
     ViewData["Title"] = "Edit";
@@ -20,12 +20,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Modalidade" class="control-label"></label>
-                <select asp-for="Modalidade" class="form-control" asp-items="@Html.GetEnumSelectList<CertiNet.Models.ModalidadeAgendamento>()"></select>
+                <select asp-for="Modalidade" class="form-control"></select>
                 <span asp-validation-for="Modalidade" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList<CertiNet.Models.StatusAgendamento>()"></select>
+                <select asp-for="Status" class="form-control"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">

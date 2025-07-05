@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using CertiNet.Models;
+using CertiNet1.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CertiNet.Controllers
+namespace CertiNet1.Controllers
 {
     public class HomeController : Controller
     {
