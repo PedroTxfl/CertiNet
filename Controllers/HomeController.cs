@@ -1,9 +1,11 @@
-﻿using System.Diagnostics;
-using CertiNet1.Models;
+﻿using CertiNet1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace CertiNet1.Controllers
 {
+    [Authorize(Roles = "Admin, AgenteDeRegistro")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
