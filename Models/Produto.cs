@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CertiNet.Models
+namespace CertiNet1.Models
 {
     public class Produto
     {
@@ -10,7 +10,7 @@ namespace CertiNet.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "O nome do produto é obrigatório.")]
-        [StringLength(100)] // Define o tamanho máximo do campo
+        [StringLength(100)] 
         [DisplayName("Nome do Produto")]
         public string Nome { get; set; }
 
@@ -20,10 +20,10 @@ namespace CertiNet.Models
 
         [StringLength(255)]
         [DisplayName("Descrição")]
-        public string? Descricao { get; set; } 
+        public string? Descricao { get; set; }
 
         [Required(ErrorMessage = "O preço é obrigatório.")]
-        [Column(TypeName = "decimal(18,2)")] 
+        [Column(TypeName = "decimal(18,2)")]
         [DisplayName("Preço")]
         public decimal Preco { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace CertiNet.Models.ViewModels
+namespace CertiNet1.Models.ViewModels
 {
     public class PerformanceAgenteViewModel
     {

@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CertiNet.Models
+namespace CertiNet1.Models
 {
     public class Cliente
     {
@@ -35,6 +34,5 @@ namespace CertiNet.Models
 
         public virtual ICollection<CertificadoDigital> CertificadosDigitais { get; set; } = new List<CertificadoDigital>();
         public virtual ICollection<Agendamento> Agendamentos { get; set; } = new List<Agendamento>();
-
     }
 }

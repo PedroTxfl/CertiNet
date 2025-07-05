@@ -1,8 +1,73 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Página Inicial";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center p-5 mb-4 bg-light rounded-3">
+    <h1 class="display-4">Bem-vindo ao CertiNet!</h1>
+    <p class="lead text-muted">Sua plataforma completa para gerenciamento de certificados digitais, clientes e agendamentos.</p>
+    <hr>
+    <p>Utilize os atalhos abaixo para navegar rapidamente pelas principais funcionalidades do sistema.</p>
 </div>
+
+<div class="row text-center">
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">📅 Agendamentos</h5>
+                <p class="card-text">Visualize e gerencie todos os agendamentos de validação de certificados.</p>
+                <a asp-controller="Agendamentoes" asp-action="Index" class="btn btn-primary mt-auto">Acessar Agendamentos</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">📜 Certificados Digitais</h5>
+                <p class="card-text">Consulte, filtre e gerencie todos os certificados emitidos para os clientes.</p>
+                <a asp-controller="CertificadoDigitals" asp-action="Index" class="btn btn-primary mt-auto">Acessar Certificados</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">📊 Relatórios</h5>
+                <p class="card-text">Acesse relatórios de performance, vencimentos e produtividade da equipe.</p>
+                <a asp-controller="Relatorios" asp-action="Index" class="btn btn-primary mt-auto">Ver Relatórios</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@if (User.IsInRole("Admin"))
+{
+    <hr class="my-4">
+    <h3 class="text-center mb-3">Painel do Administrador</h3>
+    <div class="row text-center justify-content-center">
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">👥 Clientes</h5>
+                    <p class="card-text">Administre a base de dados completa de todos os clientes.</p>
+                    <a asp-controller="Clientes" asp-action="Index" class="btn btn-secondary mt-auto">Gerenciar Clientes</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">👤 Usuários do Sistema</h5>
+                    <p class="card-text">Crie e gerencie as contas e perfis dos usuários do sistema.</p>
+                    <a asp-controller="Usuarios" asp-action="Index" class="btn btn-danger mt-auto">Gerenciar Usuários</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}

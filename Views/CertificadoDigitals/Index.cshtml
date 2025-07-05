@@ -1,0 +1,81 @@
+﻿@model IEnumerable<CertiNet1.Models.CertificadoDigital>
+
+@{
+    ViewData["Title"] = "Certificados Digitais";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row align-items-center mb-4">
+    <div class="col-md-6">
+
+        <p>
+            <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Adicionar Novo</a>
+        </p>
+    </div>
+
+    <div class="col-md-6">
+        <form asp-controller="CertificadoDigitals" asp-action="Index" method="get">
+            <div class="input-group">
+                <input type="text" name="SearchString" class="form-control" placeholder="Procurar por Nome ou CPF/CNPJ do cliente..." value="@ViewData["CurrentFilter"]" />
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i> Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DataEmissao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataVencimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstaAtivo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Produto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Agendamento)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataEmissao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataVencimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstaAtivo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente.CPF_CNPJ)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Produto.Categoria)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Agendamento.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

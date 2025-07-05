@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CertiNet.Models
+namespace CertiNet1.Models
 {
     public class CertificadoDigital
     {
@@ -31,7 +31,7 @@ namespace CertiNet.Models
 
         [DisplayName("Produto")]
         public int ProdutoId { get; set; }
-        
+
         [ForeignKey("ProdutoId")]
         public virtual Produto? Produto { get; set; }
 

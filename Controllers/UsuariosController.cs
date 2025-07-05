@@ -1,57 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CertiNet1.Areas.Identity.Data;
+using CertiNet1.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CertiNet.Data;
-using CertiNet.Models;
-using Microsoft.AspNetCore.Authorization; // Adicionado para proteger o controller
 
-namespace CertiNet.Controllers
+namespace CertiNet1.Controllers
 {
-    // Apenas usuários logados poderão acessar a gestão de usuários.
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class UsuariosController : Controller
     {
-        private readonly CertiNetContext _context;
+        private readonly UserManager<UserModel> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsuariosController(CertiNetContext context)
+        public UsuariosController(UserManager<UserModel> userManager, RoleManager<IdentityRole> roleManager)
         {
-            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+            var users = await _userManager.Users.ToListAsync();
+            return View(users);
         }
-
-        // GET: Usuarios/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            return View(usuario);
-        }
-
-
 
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            return Redirect("/Identity/Account/Register");
+            ViewBag.Roles = new SelectList(_roleManager.Roles, "Name", "Name");
+            return View();
+        }
+
+        // POST: Usuarios/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new UserModel { UserName = model.Email, Email = model.Email, Nome = model.Nome };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, model.RoleName);
+                    return RedirectToAction(nameof(Index));
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            ViewData["Roles"] = new SelectList(_roleManager.Roles, "Name", "Name", model.RoleName);
+            return View(model);
         }
 
         // GET: Usuarios/Delete/5
@@ -62,14 +65,13 @@ namespace CertiNet.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(user);
         }
 
         // POST: Usuarios/Delete/5
@@ -77,19 +79,23 @@ namespace CertiNet.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var usuario = await _context.Users.FindAsync(id);
-            if (usuario != null)
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
             {
-                _context.Users.Remove(usuario);
+                if (user.Email.Equals("admin@certinet.com", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    TempData["Error"] = "Não é permitido excluir o usuário Administrador principal.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var result = await _userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                {
+                    TempData["Error"] = "Erro ao excluir o usuário.";
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool UsuarioExists(string id)
-        {
-            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

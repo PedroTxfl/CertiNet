@@ -1,8 +1,9 @@
-﻿using System.Diagnostics;
-using CertiNet.Models;
+﻿using CertiNet1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
-namespace CertiNet.Controllers
+namespace CertiNet1.Controllers
 {
     public class HomeController : Controller
     {

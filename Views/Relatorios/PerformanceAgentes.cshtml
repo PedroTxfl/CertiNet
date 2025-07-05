@@ -1,12 +1,27 @@
-﻿@model IEnumerable<CertiNet.Models.ViewModels.PerformanceAgenteViewModel>
+﻿@model IEnumerable<CertiNet1.Models.ViewModels.PerformanceAgenteViewModel>
 
 @{
     ViewData["Title"] = "Relatório de Performance de Agentes";
 }
 
-<h1>@ViewData["Title"]</h1>
-<p class="text-muted">Análise de vendas e valor total gerado por cada agente.</p>
-<hr />
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p class="text-muted mb-0">Análise de vendas e valor total gerado por cada agente.</p>
+    </div>
+    <div>
+        <form asp-action="PerformanceAgentes" method="get" class="form-inline">
+            <div class="input-group">
+                <input type="text" name="searchString" class="form-control" placeholder="Nome do agente" value="@ViewData["CurrentFilter"]" />
+                <div class="input-group-append">
+                    <input type="submit" value="Buscar" class="btn btn-primary" />
+                    <a asp-action="PerformanceAgentes" class="btn btn-secondary">Limpar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 @if (Model.Any())
 {
