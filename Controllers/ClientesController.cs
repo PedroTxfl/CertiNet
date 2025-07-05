@@ -22,11 +22,30 @@ namespace CertiNet1.Controllers
         }
 
         // GET: Clientes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int? pageNumber)
         {
-              return _context.Clientes != null ? 
-                          View(await _context.Clientes.ToListAsync()) :
-                          Problem("Entity set 'CertiNet1Context.Clientes'  is null.");
+            ViewData["CurrentFilter"] = searchString;
+
+            var clientes = from c in _context.Clientes
+                           select c;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                clientes = clientes.Where(c => c.NomeRazaoSocial.Contains(searchString)
+                                       || c.CPF_CNPJ.Contains(searchString));
+            }
+
+            int pageSize = 10;
+            int currentPage = pageNumber ?? 1;
+
+            var pagedClientes = await clientes.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            ViewBag.PageNumber = currentPage;
+            ViewBag.TotalPages = (int)Math.Ceiling(await clientes.CountAsync() / (double)pageSize);
+            ViewBag.HasPreviousPage = currentPage > 1;
+            ViewBag.HasNextPage = currentPage < ViewBag.TotalPages;
+
+            return View(pagedClientes);
         }
 
         // GET: Clientes/Details/5

@@ -5,7 +5,6 @@ using System.Diagnostics;
 
 namespace CertiNet1.Controllers
 {
-    [Authorize(Roles = "Admin, AgenteDeRegistro")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

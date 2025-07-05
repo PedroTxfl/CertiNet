@@ -22,10 +22,24 @@ namespace CertiNet1.Controllers
         }
 
         // GET: Agendamentoes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime? dataFiltro)
         {
-            var certiNet1Context = _context.Agendamentos.Include(a => a.Cliente).Include(a => a.Usuario);
-            return View(await certiNet1Context.ToListAsync());
+            if (dataFiltro.HasValue)
+            {
+                ViewData["CurrentDateFilter"] = dataFiltro.Value.ToString("yyyy-MM-dd");
+            }
+
+            var agendamentos = from a in _context.Agendamentos.Include(a => a.Cliente).Include(a => a.Usuario)
+                               select a;
+
+            if (dataFiltro.HasValue)
+            {
+                agendamentos = agendamentos.Where(a => a.DataHora.Date == dataFiltro.Value.Date);
+            }
+
+            agendamentos = agendamentos.OrderByDescending(a => a.DataHora);
+
+            return View(await agendamentos.ToListAsync());
         }
 
         // GET: Agendamentoes/Details/5

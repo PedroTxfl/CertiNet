@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Central de Relatórios";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Relatórios de Certificados
+            </div>
+            <div class="card-body">
+                <p>Acompanhe o ciclo de vida dos certificados digitais.</p>
+                <p>
+                    <a asp-controller="Relatorios" asp-action="CertificadosAVencer" asp-route-dias="30" class="btn btn-primary">Vencendo em 30 Dias</a>
+                    <a asp-controller="Relatorios" asp-action="CertificadosAVencer" asp-route-dias="60" class="btn btn-info">Vencendo em 60 Dias</a>
+                    <a asp-controller="Relatorios" asp-action="CertificadosAVencer" asp-route-dias="90" class="btn btn-warning">Vencendo em 90 Dias</a>
+                </p>
+            </div>
+            <div class="card-body">
+                <p>Acompanhe a performance da equipe e das operações do dia a dia.</p>
+                <p>
+                    <a asp-controller="Relatorios" asp-action="PerformanceAgentes" class="btn btn-success">Performance dos Agentes</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -22,11 +22,35 @@ namespace CertiNet1.Controllers
         }
 
         // GET: CertificadoDigitals
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int? pageNumber)
         {
-            var certiNet1Context = _context.CertificadosDigitais.Include(c => c.Agendamento).Include(c => c.Cliente).Include(c => c.Produto);
-            return View(await certiNet1Context.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var certificados = from c in _context.CertificadosDigitais
+                               .Include(c => c.Cliente)
+                               .Include(c => c.Produto)
+                               select c;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                certificados = certificados.Where(c => c.Cliente.CPF_CNPJ.Contains(searchString));
+            }
+
+            int pageSize = 10;
+            int currentPage = pageNumber ?? 1;
+
+            var pagedCertificados = await certificados.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            ViewBag.PageNumber = currentPage;
+            ViewBag.TotalPages = (int)Math.Ceiling(await certificados.CountAsync() / (double)pageSize);
+            ViewBag.HasPreviousPage = currentPage > 1;
+            ViewBag.HasNextPage = currentPage < ViewBag.TotalPages;
+
+            return View(pagedCertificados);
         }
+
+
+
 
         // GET: CertificadoDigitals/Details/5
         public async Task<IActionResult> Details(int? id)

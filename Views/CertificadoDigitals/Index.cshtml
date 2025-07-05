@@ -1,15 +1,31 @@
 ﻿@model IEnumerable<CertiNet1.Models.CertificadoDigital>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Certificados Digitais";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
+<div class="row align-items-center mb-4">
+    <div class="col-md-6">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+        <p>
+            <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Adicionar Novo</a>
+        </p>
+    </div>
+
+    <div class="col-md-6">
+        <form asp-controller="CertificadoDigitals" asp-action="Index" method="get">
+            <div class="input-group">
+                <input type="text" name="SearchString" class="form-control" placeholder="Procurar por Nome ou CPF/CNPJ do cliente..." value="@ViewData["CurrentFilter"]" />
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i> Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
