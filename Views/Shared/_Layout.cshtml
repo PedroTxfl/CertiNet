@@ -25,9 +25,13 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Produtos" asp-action="Index">Produtos</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuários</a>
-                        </li>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuários</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="CertificadoDigitals" asp-action="Index">Certificado Digital</a>
                         </li>

@@ -13,7 +13,7 @@
     <div>
         <form asp-action="PerformanceAgentes" method="get" class="form-inline">
             <div class="input-group">
-                <input type="text" name="searchString" class="form-control" placeholder="Procurar por nome do agente..." value="@ViewData["CurrentFilter"]" />
+                <input type="text" name="searchString" class="form-control" placeholder="Nome do agente" value="@ViewData["CurrentFilter"]" />
                 <div class="input-group-append">
                     <input type="submit" value="Buscar" class="btn btn-primary" />
                     <a asp-action="PerformanceAgentes" class="btn btn-secondary">Limpar</a>
