@@ -38,8 +38,9 @@ namespace CertiNet1.Controllers
 
 
 
-        public async Task<IActionResult> PerformanceAgentes()
+        public async Task<IActionResult> PerformanceAgentes(string searchString)
         {
+            ViewData["CurrentFilter"] = searchString;
 
             var vendasCompletas = await _context.CertificadosDigitais
                 .Include(c => c.Produto)
@@ -48,18 +49,25 @@ namespace CertiNet1.Controllers
                 .Where(c => c.AgendamentoId != null)
                 .ToListAsync();
 
-            var relatorio = vendasCompletas
+            var relatorioQuery = vendasCompletas
                 .GroupBy(c => c.Agendamento.Usuario)
                 .Select(g => new PerformanceAgenteViewModel
                 {
                     NomeAgente = g.Key.Nome,
                     ValorTotalVendido = g.Sum(c => c.Produto.Preco),
                     VendasRealizadas = g.Count()
-                })
+                });
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                relatorioQuery = relatorioQuery.Where(r => r.NomeAgente.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var relatorioFinal = relatorioQuery
                 .OrderByDescending(r => r.ValorTotalVendido)
                 .ToList();
 
-            return View(relatorio);
+            return View(relatorioFinal);
         }
     }
 }
