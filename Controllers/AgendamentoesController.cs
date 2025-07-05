@@ -52,7 +52,7 @@ namespace CertiNet1.Controllers
         public IActionResult Create()
         {
             ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "CPF_CNPJ");
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome");
             return View();
         }
 
@@ -88,7 +88,7 @@ namespace CertiNet1.Controllers
                 return NotFound();
             }
             ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "CPF_CNPJ", agendamento.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id", agendamento.UsuarioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Nome", agendamento.UsuarioId);
             return View(agendamento);
         }
 

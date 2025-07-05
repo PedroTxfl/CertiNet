@@ -33,7 +33,7 @@ namespace CertiNet1.Models
         public string UsuarioId { get; set; }
 
         [ForeignKey("UsuarioId")]
-        public virtual UserModel Usuario { get; set; }
+        public virtual UserModel? Usuario { get; set; }
     }
 
     public enum ModalidadeAgendamento
