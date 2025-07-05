@@ -74,12 +74,18 @@ namespace CertiNet1.Controllers
         }
 
         // GET: CertificadoDigitals/Create
-        public IActionResult Create()
+        public IActionResult Create(int? agendamentoId, int? clienteId)
         {
-            ViewData["AgendamentoId"] = new SelectList(_context.Agendamentos, "Id", "Id");
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "CPF_CNPJ");
-            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "Id", "Categoria");
-            return View();
+            ViewData["AgendamentoId"] = new SelectList(_context.Agendamentos, "Id", "Id", agendamentoId);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "NomeRazaoSocial", clienteId); // Usando Nome para ser mais amigável
+            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "Id", "Nome");
+
+            var certificado = new CertificadoDigital
+            {
+                DataEmissao = DateTime.Now
+            };
+
+            return View(certificado);
         }
 
         // POST: CertificadoDigitals/Create
@@ -87,14 +93,42 @@ namespace CertiNet1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DataEmissao,DataVencimento,EstaAtivo,ClienteId,ProdutoId,AgendamentoId")] CertificadoDigital certificadoDigital)
+        public async Task<IActionResult> Create([Bind("Id,DataEmissao,EstaAtivo,ClienteId,ProdutoId,AgendamentoId")] CertificadoDigital certificadoDigital)
         {
             if (ModelState.IsValid)
             {
+
+                var produtoSelecionado = await _context.Produtos.FindAsync(certificadoDigital.ProdutoId);
+
+                if (produtoSelecionado != null)
+                {
+                    certificadoDigital.DataVencimento = certificadoDigital.DataEmissao.AddMonths(produtoSelecionado.ValidadeMeses);
+                }
+                else
+                {
+                    ModelState.AddModelError("ProdutoId", "Produto selecionado é inválido.");
+
+                    ViewData["AgendamentoId"] = new SelectList(_context.Agendamentos, "Id", "Id", certificadoDigital.AgendamentoId);
+                    ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "CPF_CNPJ", certificadoDigital.ClienteId);
+                    ViewData["ProdutoId"] = new SelectList(_context.Produtos, "Id", "Categoria", certificadoDigital.ProdutoId);
+                    return View(certificadoDigital);
+                }
+
+                if (certificadoDigital.AgendamentoId.HasValue)
+                {
+                    var agendamentoParaConcluir = await _context.Agendamentos.FindAsync(certificadoDigital.AgendamentoId.Value);
+
+                    if (agendamentoParaConcluir != null)
+                    {
+                        agendamentoParaConcluir.Status = StatusAgendamento.Concluido;
+                    }
+                }
+
                 _context.Add(certificadoDigital);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["AgendamentoId"] = new SelectList(_context.Agendamentos, "Id", "Id", certificadoDigital.AgendamentoId);
             ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "CPF_CNPJ", certificadoDigital.ClienteId);
             ViewData["ProdutoId"] = new SelectList(_context.Produtos, "Id", "Categoria", certificadoDigital.ProdutoId);
