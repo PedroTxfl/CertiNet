@@ -21,7 +21,7 @@ O projeto foi desenvolvido sobre a plataforma .NET, utilizando as seguintes tecn
   * **Banco de Dados:** SQL Server
   * **Autenticação e Autorização:** ASP.NET Core Identity com sistema de Roles (Perfis)
   * **Front-end:** HTML5, CSS3, JavaScript
-  * **Frameworks de UI:** Bootstrap 5, jQuery
+  * **Frameworks de UI:** Bootstrap
 
 ### **3. Arquitetura e Estrutura do Projeto**
 
