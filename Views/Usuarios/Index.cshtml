@@ -30,8 +30,7 @@
                 <td>@Html.DisplayFor(modelItem => item.Nome)</td>
                 <td>@Html.DisplayFor(modelItem => item.Email)</td>
                 <td>
-                    @* <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> | *@
-                    <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><img src="./images/lixo.png" alt="Apagar item" /></a>
                 </td>
             </tr>
         }
