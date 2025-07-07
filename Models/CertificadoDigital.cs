@@ -21,7 +21,7 @@ namespace CertiNet1.Models
         [DisplayName("Data de Vencimento")]
         public DateTime DataVencimento { get; set; }
 
-        [DisplayName("Ativo?")]
+        [DisplayName("Ativo")]
         public bool EstaAtivo { get; set; }
 
 
